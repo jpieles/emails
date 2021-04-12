@@ -132,6 +132,7 @@ public class Emails {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename,false));
             for(int i = 0; i < emails.size(); i++) {
+                
                 writer.append(emails.get(i)[0] + "," + emails.get(i)[1]);
                 writer.newLine();
             }
