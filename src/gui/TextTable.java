@@ -10,34 +10,32 @@ import util.StringUtil;
 
 /**
  *
- * @author jpi
+ * @author Julian Pieles
  */
 public class TextTable {
     
-    
-    
     public static void showTable(ArrayList<String[]> list, String... headers) {
-        int margin = headers[0].length() > StringUtil.numberLength(list.size() - 1) ? headers[0].length() : StringUtil.numberLength(list.size() -1);
-        showTableHeader(margin, list,headers);
-        showTableBody(list,margin);
+        showTableHeader(list,headers);
+        showTableBody(list);
+        System.out.print("\n");
     }
     
-    private static void showTableHeader(int margin, ArrayList<String[]> list, String[] headers) {
-        System.out.print("| " + StringUtil.repeatChar(' ', margin - headers[0].length()) + "Number" + " | ");
+    private static void showTableHeader(ArrayList<String[]> list, String[] headers) {
+        System.out.print(StringUtil.repeatChar(' ', StringUtil.numberLength(list.size() -1)+1) + " | ");
         for(int i = 0; i < headers.length; i++) {
             System.out.print(StringUtil.repeatChar(' ', StringUtil.getLongestWord(list, i).length() - headers[i].length()) + headers[i] + " | ");
         }
         System.out.print("\n");
-        System.out.print("+-" + StringUtil.repeatChar('-', margin +2) + "-+-");
+        System.out.print(StringUtil.repeatChar(' ', StringUtil.numberLength(list.size() - 1) +2 ) + "+");
         for(int i = 0; i < headers.length; i++) {
-            System.out.print(StringUtil.repeatChar('-', StringUtil.getLongestWord(list, i).length()) + "-+");
+            System.out.print(StringUtil.repeatChar('-', StringUtil.getLongestWord(list, i).length() + 2) + "+");
         }
         System.out.print("\n");
     }
     
-    private static void showTableBody(ArrayList<String[]> list, int margin) {
+    private static void showTableBody(ArrayList<String[]> list) {
         for(int i = 0; i < list.size(); i++) {
-            System.out.print("| " + StringUtil.repeatChar(' ', margin - String.valueOf(i).length() + 2) + (i+1) + " | ");
+            System.out.print(StringUtil.repeatChar(' ', StringUtil.numberLength(list.size() - 1)+1 - StringUtil.numberLength(i+1)) + (i+1) + " | ");
             for(int j = 0; j < list.get(i).length; j++) {
                 System.out.print(StringUtil.repeatChar(' ', StringUtil.getLongestWord(list, j).length() - list.get(i)[j].length()) + list.get(i)[j] + " | ");
             }

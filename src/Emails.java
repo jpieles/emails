@@ -10,6 +10,7 @@ import util.FileUtil;
 /**
  *
  * @author sascha
+ * @author Julian Pieles
  */
 public class Emails {
 
@@ -88,9 +89,6 @@ public class Emails {
     // Email functions
     private static void showEmails() {
         System.out.println("\nStored Emails\n-------------\n");
-        for (int i = 0; i < emails.size(); i++) {
-            System.out.println((i + 1) + " | " + emails.get(i)[0] + " | " + emails.get(i)[1]);
-        }
         TextTable.showTable(emails, "Name", "Address");
     }
 
