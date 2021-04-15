@@ -1,11 +1,10 @@
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import util.FileUtil;
 
 /**
  *
@@ -21,10 +20,11 @@ public class Emails {
     private static int menu(String... entries) {
         outputNumberedList(entries);
         System.out.print("Deine Wahl: ");
-        return Integer.parseInt(input());
+        return inputInt();
     }
     
     private static void showEmails() {
+        System.out.println("\nStored Emails\n-------------\n");
         for(int i = 0; i < emails.size(); i++) {
             System.out.println((i+1) + " | " + emails.get(i)[0] + " | " + emails.get(i)[1]);
         }
@@ -41,7 +41,7 @@ public class Emails {
     private static void removeEmail() {
         showEmails();
         System.out.println("Which one to remove ? (0 for 'Main Menu'");
-        int choice = Integer.parseInt(input());
+        int choice = inputInt();
         if(choice == 0) {
             return;
         }
@@ -51,7 +51,7 @@ public class Emails {
     private static void editEmail() {
         showEmails();
         System.out.println("Which one to edit ? (0 for 'Main Menu'");
-        int choice = Integer.parseInt(input());
+        int choice = inputInt();
         if(choice == 0) {
             return;
         }
@@ -59,7 +59,7 @@ public class Emails {
         System.out.println("Editing " + emails.get(choice-1)[0] + "/" + emails.get(choice-1)[1]+ "\nWhat do you want to change?");
         outputNumberedList("Name","Email");
         System.out.println("Your choice: ");
-        int choice2 = Integer.parseInt(input());
+        int choice2 = inputInt();
         if(choice2 == 1) {
             System.out.println("Enter new Name");
             String name = input();
@@ -110,56 +110,26 @@ public class Emails {
     //-------------------- File Functions 
     private static void load(String filename) {
         System.out.println("Loading from " + filename);
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filename)); 
-                while(reader.ready()) {
-                    String[] entries = reader.readLine().split(",");
-                    if(!emails.contains(entries)) {
-                        emails.add(entries);
-                    }
-                }
-            
-        }catch(Exception ex) {
-            ex.printStackTrace();
-        }
+        FileUtil.loadCSV(filename, emails);
         System.out.println("Loaded " + emails.size() + " Emails");
     }
 
     private static void save(String filename) {
-        File file = new File(filename);
-        System.out.println(emails);
-        boolean append = file.exists();
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename,false));
-            for(int i = 0; i < emails.size(); i++) {
-                
-                writer.append(emails.get(i)[0] + "," + emails.get(i)[1]);
-                writer.newLine();
+        String data = "";
+        for(int i = 0; i < emails.size(); i++) {
+                data += emails.get(i)[0] + "," + emails.get(i)[1] + "\n";
             }
-            writer.close();
-            System.out.println("Datei " + file.getAbsolutePath()+" geschrieben");
-        } catch(Exception ex) {
-            System.out.println("Kann " + file.getAbsolutePath()+" nicht schreiben.");
-        }
+        FileUtil.save(filename, data);
     }
     
     private static void exportToXml(String filename) {
-        File file = new File(filename);
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false));
-            writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writer.append("<emails>");
-            writer.newLine();
-            for(int i = 0; i < emails.size(); i++) {
-                writer.append("\t<email>\n\t\t<name>" + emails.get(i)[0] + "</name>\n\t\t<address>" + emails.get(i)[1] + "</adress>\n\t</email>");
-                writer.newLine();
+        String data = "";
+        data += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<emails>\n";
+        for(int i = 0; i < emails.size(); i++) {
+                data += "\t<email>\n\t\t<name>" + emails.get(i)[0] + "</name>\n\t\t<address>" + emails.get(i)[1] + "</adress>\n\t</email>\n";
             }
-            writer.append("</emails>");
-            writer.close();
-            System.out.println("Datei " + file.getAbsolutePath()+" geschrieben");
-        } catch(Exception ex) {
-            System.out.println("Kann " + file.getAbsolutePath()+" nicht schreiben.");
-        }
+        data += "</emails>";
+        FileUtil.save(filename, data);
     }
 
     // Generic Menu-Functions

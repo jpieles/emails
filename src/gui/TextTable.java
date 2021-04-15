@@ -5,10 +5,14 @@
  */
 package gui;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author jpi
  */
 public class TextTable {
+        
     
+     
 }
