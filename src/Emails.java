@@ -1,4 +1,5 @@
 
+import gui.TextTable;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -22,66 +23,16 @@ public class Emails {
         System.out.print("Deine Wahl: ");
         return inputInt();
     }
-    
-    private static void showEmails() {
-        System.out.println("\nStored Emails\n-------------\n");
-        for(int i = 0; i < emails.size(); i++) {
-            System.out.println((i+1) + " | " + emails.get(i)[0] + " | " + emails.get(i)[1]);
-        }
-    }
-    
-    private static void addEmail() {
-        System.out.println("Enter a name: ");
-        String name = input();
-        System.out.println("Enter the email of " + name);
-        String address = input();
-        emails.add(new String[] {name,address});
-    }
-    
-    private static void removeEmail() {
-        showEmails();
-        System.out.println("Which one to remove ? (0 for 'Main Menu'");
-        int choice = inputInt();
-        if(choice == 0) {
-            return;
-        }
-        emails.remove(choice - 1);
-    }
-    
-    private static void editEmail() {
-        showEmails();
-        System.out.println("Which one to edit ? (0 for 'Main Menu'");
-        int choice = inputInt();
-        if(choice == 0) {
-            return;
-        }
-        
-        System.out.println("Editing " + emails.get(choice-1)[0] + "/" + emails.get(choice-1)[1]+ "\nWhat do you want to change?");
-        outputNumberedList("Name","Email");
-        System.out.println("Your choice: ");
-        int choice2 = inputInt();
-        if(choice2 == 1) {
-            System.out.println("Enter new Name");
-            String name = input();
-            emails.get(choice-1)[0] = name;
-        }
-        if(choice2 == 2) {
-            System.out.println("Enter new Email");
-            String email = input();
-            emails.get(choice-1)[1] = email;
-        }
-    }
 
-    
     private static void mainMenu() {
         System.out.println("Your choice:");
         int choice;
         boolean exit = false;
         do {
-            choice = menu("Show Emails", "Add Email", "Remove Email","Edit Email", "Export to XML", "Save & Exit Program");
-            switch(choice) {
+            choice = menu("Show Emails", "Add Email", "Remove Email", "Edit Email", "Export to XML", "Save & Exit Program");
+            switch (choice) {
                 case 1:
-                    showEmails(); 
+                    showEmails();
                     break;
                 case 2:
                     addEmail();
@@ -116,26 +67,79 @@ public class Emails {
 
     private static void save(String filename) {
         String data = "";
-        for(int i = 0; i < emails.size(); i++) {
-                data += emails.get(i)[0] + "," + emails.get(i)[1] + "\n";
-            }
+        for (int i = 0; i < emails.size(); i++) {
+            data += emails.get(i)[0] + "," + emails.get(i)[1] + "\n";
+        }
         FileUtil.save(filename, data);
     }
-    
+
     private static void exportToXml(String filename) {
         String data = "";
         data += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<emails>\n";
-        for(int i = 0; i < emails.size(); i++) {
-                data += "\t<email>\n\t\t<name>" + emails.get(i)[0] + "</name>\n\t\t<address>" + emails.get(i)[1] + "</adress>\n\t</email>\n";
-            }
+        for (int i = 0; i < emails.size(); i++) {
+            data += "\t<email>\n\t\t<name>"
+                    + emails.get(i)[0] + "</name>\n\t\t<address>"
+                    + emails.get(i)[1] + "</adress>\n\t</email>\n";
+        }
         data += "</emails>";
         FileUtil.save(filename, data);
+    }
+
+    // Email functions
+    private static void showEmails() {
+        System.out.println("\nStored Emails\n-------------\n");
+        for (int i = 0; i < emails.size(); i++) {
+            System.out.println((i + 1) + " | " + emails.get(i)[0] + " | " + emails.get(i)[1]);
+        }
+        TextTable.showTable(emails, "Name", "Address");
+    }
+
+    private static void addEmail() {
+        System.out.println("Enter a name: ");
+        String name = input();
+        System.out.println("Enter the email of " + name);
+        String address = input();
+        emails.add(new String[]{name, address});
+    }
+
+    private static void removeEmail() {
+        showEmails();
+        System.out.println("Which one to remove ? (0 for 'Main Menu'");
+        int choice = inputInt();
+        if (choice == 0) {
+            return;
+        }
+        emails.remove(choice - 1);
+    }
+
+    private static void editEmail() {
+        showEmails();
+        System.out.println("Which one to edit ? (0 for 'Main Menu'");
+        int emailId = inputInt();
+        if (emailId != 0) {
+            System.out.println("Editing " + emails.get(emailId - 1)[0]
+                    + "/" + emails.get(emailId - 1)[1]
+                    + "\nWhat do you want to change?");
+            outputNumberedList("Name", "Email");
+            System.out.println("Your choice: ");
+            if (inputInt() == 1) {
+                System.out.println("Enter new Name");
+                String name = input();
+                emails.get(emailId - 1)[0] = name;
+            } else if (inputInt() == 2) {
+                System.out.println("Enter new Email");
+                String email = input();
+                emails.get(emailId - 1)[1] = email;
+            } else {
+                System.out.println("Only 1 and 2 are possible");
+            }
+        }
     }
 
     // Generic Menu-Functions
     private static void outputNumberedList(String... entries) {
         int i = 1;
-        for(String s : entries) {
+        for (String s : entries) {
             System.out.println(i + ". " + s);
             i++;
         }
@@ -177,9 +181,8 @@ public class Emails {
         System.out.println(text);
         return inputInt(from, to);
     }
-        
-//------------------------------------------------
 
+//------------------------------------------------
     public static void main(String[] args) {
         load(FILENAME);
         mainMenu();
