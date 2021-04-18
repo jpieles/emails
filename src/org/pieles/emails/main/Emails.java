@@ -13,8 +13,8 @@ import util.FileUtil;
  */
 public class Emails {
 
-    private static final String FILENAME = "/home/jpi/emails/emails.csv";
-    private static final String FILENAMEXML = "/home/jpi/emails/emails.xml";
+    private static final String FILENAME = "emails.csv";
+    private static final String FILENAMEXML = "emails.xml";
 
     private static ArrayList<String[]> emails = new ArrayList<>();
 
