@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package util;
 
 import java.io.BufferedReader;
@@ -14,11 +9,12 @@ import java.util.ArrayList;
 
 /**
  *
- * @author jpi
+ * @author Julian Pieles
  */
 public class FileUtil {
     
     public static void loadCSV(String filename, ArrayList<String[]> list) {
+        System.out.println("Loading from " + filename);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filename)); 
                 while(reader.ready()) {
@@ -29,7 +25,7 @@ public class FileUtil {
                 }
             
         }catch(Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Cannot load file");
         }
     }
     
@@ -40,9 +36,9 @@ public class FileUtil {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename,false));
                 writer.append(data);
             writer.close();
-            System.out.println("Datei " + file.getAbsolutePath()+" geschrieben");
+            System.out.println("File " + file.getAbsolutePath()+" written");
         } catch(Exception ex) {
-            System.out.println("Kann " + file.getAbsolutePath()+" nicht schreiben.");
+            System.out.println("Cannot write file " + file.getAbsolutePath());
         }
     }
     

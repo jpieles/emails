@@ -1,4 +1,3 @@
-
 import gui.TextTable;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,26 +6,25 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import util.FileUtil;
 
-/**
+/**ś
  *
  * @author sascha
  * @author Julian Pieles
  */
 public class Emails {
 
-    private static final String FILENAME = "emails.csv";
-    private static final String FILENAMEXML = "emails.xml";
+    private static final String FILENAME = "/home/jpi/emails/emails.csv";
+    private static final String FILENAMEXML = "/home/jpi/emails/emails.xml";
 
     private static ArrayList<String[]> emails = new ArrayList<>();
 
     private static int menu(String... entries) {
         outputNumberedList(entries);
-        System.out.print("Deine Wahl: ");
+        System.out.print("Your choice: ");
         return inputInt();
     }
 
     private static void mainMenu() {
-        System.out.println("Your choice:");
         int choice;
         boolean exit = false;
         do {
@@ -59,9 +57,8 @@ public class Emails {
 
     } // mainMenu
 
-    //-------------------- File Functions 
+    //-------------------- File Functions --------------------------------------
     private static void load(String filename) {
-        System.out.println("Loading from " + filename);
         FileUtil.loadCSV(filename, emails);
         System.out.println("Loaded " + emails.size() + " Emails");
     }
@@ -74,19 +71,21 @@ public class Emails {
         FileUtil.save(filename, data);
     }
 
-    private static void exportToXml(String filename) {
+    private static void exportToXml(String filename) { 
         String data = "";
         data += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<emails>\n";
         for (int i = 0; i < emails.size(); i++) {
             data += "\t<email>\n\t\t<name>"
                     + emails.get(i)[0] + "</name>\n\t\t<address>"
-                    + emails.get(i)[1] + "</adress>\n\t</email>\n";
+                    + emails.get(i)[1] + "</address>\n\t</email>\n";
         }
         data += "</emails>";
         FileUtil.save(filename, data);
     }
+    //--------------------------------------------------------------------------
 
-    // Email functions
+    //------------------- Email functions --------------------------------------
+    
     private static void showEmails() {
         System.out.println("\nStored Emails\n-------------\n");
         TextTable.showTable(emails, "Name", "Address");
@@ -103,7 +102,7 @@ public class Emails {
     private static void removeEmail() {
         showEmails();
         System.out.println("Which one to remove ? (0 for 'Main Menu'");
-        int choice = inputInt();
+        int choice = inputInt(0,emails.size());
         if (choice == 0) {
             return;
         }
@@ -113,26 +112,23 @@ public class Emails {
     private static void editEmail() {
         showEmails();
         System.out.println("Which one to edit ? (0 for 'Main Menu'");
-        int emailId = inputInt();
+        int emailId = inputInt(0,emails.size());
         if (emailId != 0) {
             System.out.println("Editing " + emails.get(emailId - 1)[0]
                     + "/" + emails.get(emailId - 1)[1]
                     + "\nWhat do you want to change?");
             outputNumberedList("Name", "Email");
             System.out.println("Your choice: ");
-            if (inputInt() == 1) {
+            if (inputInt(1,2) == 1) {
                 System.out.println("Enter new Name");
-                String name = input();
-                emails.get(emailId - 1)[0] = name;
-            } else if (inputInt() == 2) {
+                emails.get(emailId - 1)[0] = input();
+            } else if (inputInt(1,2) == 2) {
                 System.out.println("Enter new Email");
-                String email = input();
-                emails.get(emailId - 1)[1] = email;
-            } else {
-                System.out.println("Only 1 and 2 are possible");
+                emails.get(emailId - 1)[1] = input();
             }
         }
     }
+    //--------------------------------------------------------------------------
 
     // Generic Menu-Functions
     private static void outputNumberedList(String... entries) {
@@ -143,8 +139,7 @@ public class Emails {
         }
     }
 
-    // TO-DO: method menu
-    // ------------------- Input Functions
+    // ------------------- Input Functions ----------    // TO-DO: method menu---------------------------
     private final static Scanner scan = new Scanner(System.in);
 
     private static String input() {
@@ -180,7 +175,7 @@ public class Emails {
         return inputInt(from, to);
     }
 
-//------------------------------------------------
+//------------------------------------------------------------------------------
     public static void main(String[] args) {
         load(FILENAME);
         mainMenu();
